@@ -5,6 +5,8 @@ using UnityEngine;
 public class Shell : MonoBehaviour
 {
     public GameObject explosion;
+    Rigidbody rb;
+    /*
     float mass = 10;
     float force = 1000;
     float acceleration;
@@ -12,7 +14,7 @@ public class Shell : MonoBehaviour
     float speedY;
     float Gravity = -9.8f;
     float gAccel;
-
+    */
     void OnCollisionEnter(Collision col)
     {
         if (col.gameObject.tag == "tank")
@@ -26,12 +28,13 @@ public class Shell : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        rb = this.GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
     void LateUpdate()
     {
+        /*
         acceleration = force / mass;
         speedZ += acceleration * Time.deltaTime;
         gAccel = Gravity / mass;
@@ -39,5 +42,7 @@ public class Shell : MonoBehaviour
         this.transform.Translate(0, speedY, speedZ);
 
         force = 0;
-    }
+        */
+        this.transform.forward = rb.velocity;
+}
 }
