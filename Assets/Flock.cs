@@ -21,10 +21,20 @@ public class Flock : MonoBehaviour {
         // Determine the bounding box of the manager cube
         Bounds b = new Bounds(myManager.transform.position, myManager.swimLimits * 2.0f);
 
-        // If the fish is outside the bounds of the cube then start turning around
+        // If the fish is outside the bounds of the cube or about to hit something
+        // then start turning around
+        RaycastHit hit = new RaycastHit();
+        Vector3 direction = Vector3.zero;
+
         if (!b.Contains(transform.position)) {
 
             turning = true;
+            direction = myManager.transform.position - transform.position;
+        } else if (Physics.Raycast(transform.position, this.transform.forward * 50.0f, out hit)) {
+
+            turning = true;
+             Debug.DrawRay(this.transform.position, this.transform.forward * 50.0f, Color.red);
+            direction = Vector3.Reflect(this.transform.forward, hit.normal);
         } else {
 
             turning = false;
@@ -34,7 +44,6 @@ public class Flock : MonoBehaviour {
         if (turning) {
 
             // Turn towards the centre of the cube
-            Vector3 direction = myManager.transform.position - transform.position;
             transform.rotation = Quaternion.Slerp(transform.rotation,
                                                   Quaternion.LookRotation(direction),
                                                   myManager.rotationSpeed * Time.deltaTime);
